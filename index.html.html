@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ana e Felipe - Nosso Netflix ❤️</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial, sans-serif;
+background:#141414;
+color:white;
+}
+
+/* NAVBAR */
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 20px;
+background:black;
+position:relative;
+flex-wrap:wrap;
+}
+
+.logo{
+color:#e50914;
+font-size:26px;
+position:absolute;
+left:50%;
+transform:translateX(-50%);
+}
+
+.icones-romanticos{
+display:flex;
+gap:15px;
+font-size:30px;
+cursor:pointer;
+}
+
+.icones-romanticos span:hover{
+transform:scale(1.4);
+}
+
+.contador-topo{
+background:rgba(0,0,0,0.8);
+padding:15px 25px;
+border-radius:10px;
+border-left:5px solid #e50914;
+min-width:240px;
+text-align:center;
+}
+
+/* CARTAS */
+.carta{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%) scale(0);
+background:white;
+color:black;
+width:320px;
+max-width:90%;
+padding:25px;
+border-radius:12px;
+text-align:center;
+z-index:9999;
+transition:.4s;
+}
+
+.carta.ativa{
+transform:translate(-50%,-50%) scale(1);
+}
+
+.fechar-carta{
+margin-top:15px;
+background:#e50914;
+color:white;
+border:none;
+padding:8px 15px;
+border-radius:5px;
+cursor:pointer;
+}
+
+/* BANNER */
+.banner{
+background:url("img/Firefly_Gemini Flash-01 (1).png") center/cover no-repeat;
+min-height:100vh;
+display:flex;
+align-items:center;
+padding:40px;
+}
+
+.banner-content{
+max-width:600px;
+}
+
+.banner-content h2{
+font-size:48px;
+}
+
+.frase-romantica{
+font-size:18px;
+color:#ddd;
+margin-bottom:20px;
+}
+
+/* BOTÕES */
+.btn{
+background:#e50914;
+border:none;
+padding:10px 15px;
+margin-right:10px;
+margin-top:10px;
+cursor:pointer;
+border-radius:5px;
+color:white;
+}
+
+.btn:hover{
+background:#f40612;
+transform:scale(1.05);
+}
+
+/* GALERIA */
+.momentos{
+padding:30px;
+text-align:center;
+}
+
+.galeria{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:20px;
+padding:20px;
+}
+
+/* ✅ CORREÇÃO RESPONSIVA DAS IMAGENS */
+.card{
+aspect-ratio:2/3;
+overflow:hidden;
+border-radius:8px;
+}
+
+.card img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+/* SURPRESA */
+.mensagem-secreta{
+display:none;
+text-align:center;
+padding:40px;
+background:rgba(229,9,20,0.8);
+border-radius:10px;
+width:80%;
+margin:30px auto;
+}
+
+/* CORAÇÃO */
+.heart-message{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+width:240px;
+height:220px;
+background:red;
+clip-path:polygon(50% 90%,0 40%,25% 0,50% 25%,75% 0,100% 40%);
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+padding:30px;
+color:white;
+font-weight:bold;
+z-index:999;
+}
+
+.heart{
+position:fixed;
+top:-10px;
+color:red;
+font-size:24px;
+animation:fall 5s linear forwards;
+}
+
+@keyframes fall{
+to{
+transform:translateY(100vh);
+opacity:0;
+}
+}
+
+/* RESPONSIVO */
+@media(max-width:768px){
+
+.logo{
+position:static;
+transform:none;
+margin:10px auto;
+}
+
+.navbar{
+flex-direction:column;
+gap:10px;
+}
+
+.banner{
+padding:20px;
+text-align:center;
+justify-content:center;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<nav class="navbar">
+
+<div class="icones-romanticos">
+<span id="abrirCarta">❤️</span>
+<span id="abrirCarta2">💍</span>
+<span id="abrirCarta3">😏</span>
+<span id="abrirCarta4">💑</span>
+</div>
+
+<h1 class="logo">NETFLIX</h1>
+
+<div class="contador-topo">
+❤️ Estamos juntos há:
+<div id="tempo"></div>
+</div>
+
+</nav>
+
+<!-- CARTAS -->
+<div class="carta" id="carta">
+<p>Haverá dias, haverá noites
+Em que as estrelas não vão se alinhar
+E o sol não vai impedir a chuva de cair
+Então deite-se comigo e deixe o tempo passar
+E não me solte ❤️</p>
+<button class="fechar-carta" onclick="fecharCarta()">Fechar</button>
+</div>
+
+<div class="carta" id="carta2">
+<p>“Gata, eu sempre sonhei em viver o que estou vivendo com você.
+Cada instante ao seu lado é um sonho realizado,
+e juntos eu sei que podemos ser ainda melhores.” 💍</p>
+<button class="fechar-carta" onclick="fecharCarta2()">Fechar</button>
+</div>
+
+<div class="carta" id="carta3">
+<p>Eu amo quando você me beija e me abraça, e quando a gente transa, parece que estamos em outro mundo, onde ali só existe o nosso desejo, nossos corpos e essa conexão que nos consome por inteiro.</p>
+<button class="fechar-carta" onclick="fecharCarta3()">Fechar</button>
+</div>
+
+<div class="carta" id="carta4">
+<p>Amor, eu sempre vou ser o seu porto seguro, não importa quantas tempestades venham. Serei o abrigo que te guarda, a força que te sustenta e o amor que nunca se apaga. Porque viver ao seu lado é a certeza de que até os dias mais difíceis se tornam leves.</p>
+<button class="fechar-carta" onclick="fecharCarta4()">Fechar</button>
+</div>
+
+<header class="banner">
+<div class="banner-content">
+
+<h2>❤️ Ana & Felipe ❤️</h2>
+
+<div class="frase-romantica">
+Nosso amor é o melhor filme que já assisti 💕
+</div>
+
+<button class="btn" id="continuar">▶️ Continuar</button>
+<button class="btn" id="favorito">✔️ Favorito</button>
+<button class="btn especial">💌 Surpresa</button>
+
+</div>
+</header>
+
+<section class="mensagem-secreta" id="mensagem">
+<h2>💖 Você é o melhor episódio da minha vida 💖</h2>
+</section>
+
+<section class="momentos">
+<h3>Nossos Melhores Momentos</h3>
+
+<div class="galeria">
+<div class="card"><img src="img/novo.jpg.jpeg"></div>
+<div class="card"><img src="img/abraço.jpg.jpeg"></div>
+<div class="card"><img src="img/começo.jpg.jpeg"></div>
+<div class="card"><img src="img/praia.jpg.jpeg"></div>
+<div class="card"><img src="img/foto.jpg.jpeg"></div>
+<div class="card"><img src="img/cinema.jpg.jpeg"></div>
+</div>
+</section>
+
+<script>
+
+/* CARTAS */
+const carta=document.getElementById("carta");
+const carta2=document.getElementById("carta2");
+const carta3=document.getElementById("carta3");
+const carta4=document.getElementById("carta4");
+
+abrirCarta.onclick=()=>carta.classList.add("ativa");
+abrirCarta2.onclick=()=>carta2.classList.add("ativa");
+abrirCarta3.onclick=()=>carta3.classList.add("ativa");
+abrirCarta4.onclick=()=>carta4.classList.add("ativa");
+
+function fecharCarta(){carta.classList.remove("ativa")}
+function fecharCarta2(){carta2.classList.remove("ativa")}
+function fecharCarta3(){carta3.classList.remove("ativa")}
+function fecharCarta4(){carta4.classList.remove("ativa")}
+
+/* CONTADOR */
+const inicio=new Date("2025-10-05");
+
+function atualizarTempo(){
+const agora=new Date();
+const diff=agora-inicio;
+
+const dias=Math.floor(diff/(1000*60*60*24));
+const horas=Math.floor(diff/(1000*60*60)%24);
+const minutos=Math.floor(diff/(1000*60)%60);
+const segundos=Math.floor(diff/1000%60);
+
+tempo.innerHTML=`${dias} dias ${horas}h ${minutos}m ${segundos}s`;
+}
+
+setInterval(atualizarTempo,1000);
+
+/* BOTÕES */
+continuar.onclick=()=>mostrarCoracao("Vou continuar te amando ❤️");
+favorito.onclick=()=>mostrarCoracao("Seu sorriso é meu favorito 😍");
+
+document.querySelector(".especial").onclick=()=>{
+mensagem.style.display="block";
+criarCoracoes();
+};
+
+function mostrarCoracao(texto){
+const heart=document.createElement("div");
+heart.className="heart-message";
+heart.innerText=texto;
+document.body.appendChild(heart);
+setTimeout(()=>heart.remove(),3000);
+}
+
+function criarCoracoes(){
+for(let i=0;i<15;i++){
+const h=document.createElement("div");
+h.className="heart";
+h.innerText="❤️";
+h.style.left=Math.random()*window.innerWidth+"px";
+document.body.appendChild(h);
+setTimeout(()=>h.remove(),5000);
+}
+}
+
+</script>
+
+</body>
+</html>
