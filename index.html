@@ -10,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -18,6 +19,7 @@
       --text: #f9f9f9;
       --navbar: rgba(4, 7, 20, 0.95);
       --game-pink: #ff0055;
+      --surprise-gold: #ffd700;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -86,7 +88,7 @@
     .nav-links li { position: relative; cursor: pointer; color: rgba(255,255,255,0.8); padding: 10px 0; transition: color 0.3s; }
     .nav-links li:hover { color: #fff; }
 
-    /* Balão de Mensagem (PC) */
+    /* Balão de Mensagem */
     .nav-links li::after {
       content: attr(data-msg); 
       position: absolute; top: 50px; left: 0; 
@@ -111,7 +113,6 @@
         .nav-links { gap: 12px; font-size: 0.7rem; }
         .logo { font-size: 0.95rem; }
         
-        /* Balão Centralizado no Mobile */
         .nav-links li::after {
             position: fixed; 
             top: 80px; left: 50%; transform: translateX(-50%);
@@ -201,7 +202,7 @@
     }
     .card:active { transform: scale(0.95); border-color: var(--accent); }
 
-    /* --- TE AMO BRILHANTE (CORRIGIDO) --- */
+    /* --- TE AMO BRILHANTE --- */
     .gelo-3d-container { flex: 0 0 auto; padding: 0 40px; display: flex; flex-direction: column; align-items: center; scroll-snap-align: center; }
     .gelo-word { 
         font-family: 'Inter', sans-serif; 
@@ -210,7 +211,7 @@
         color: #fff; 
         font-size: clamp(2.5rem, 7vw, 4rem); 
         text-shadow: 0 0 15px rgba(0, 224, 255, 0.7); 
-        opacity: 1; /* Transparência removida */
+        opacity: 1; 
     }
 
     /* --- MODAIS --- */
@@ -233,18 +234,28 @@
     .heart-beat { display: inline-block; color: #ff4d4d; animation: batimento 1.5s infinite; }
     @keyframes batimento { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.3); } }
 
-    /* --- JOGO FLUTUANTE --- */
-    .game-floater {
+    /* --- BOTÕES FLUTUANTES (CONTAINER) --- */
+    .floaters-container {
         position: fixed; bottom: 30px; right: 30px;
-        background: linear-gradient(45deg, var(--game-pink), #ff00aa);
-        color: white; padding: 15px 25px; border-radius: 50px; font-weight: 800;
-        cursor: pointer; z-index: 9000; box-shadow: 0 5px 20px rgba(255, 0, 85, 0.5);
-        animation: floatGame 3s ease-in-out infinite; font-size: 0.9rem; text-transform: uppercase;
-        display: flex; align-items: center; gap: 8px; transition: 0.2s;
+        display: flex; gap: 10px; z-index: 9000;
+        align-items: flex-end;
     }
-    .game-floater:hover { transform: scale(1.1); }
+
+    .game-floater, .surprise-floater {
+        padding: 15px 20px; border-radius: 50px; font-weight: 800;
+        cursor: pointer; box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        font-size: 0.9rem; text-transform: uppercase;
+        display: flex; align-items: center; gap: 8px; transition: 0.2s;
+        color: white; animation: floatGame 3s ease-in-out infinite;
+    }
+    .game-floater:hover, .surprise-floater:hover { transform: scale(1.1); }
+    
+    .game-floater { background: linear-gradient(45deg, var(--game-pink), #ff00aa); }
+    .surprise-floater { background: linear-gradient(45deg, #00e0ff, #0072d2); animation-delay: 1.5s; }
+
     @keyframes floatGame { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 
+    /* Estilos do Quiz */
     .level-badge { display: inline-block; padding: 5px 15px; border-radius: 20px; font-size: 0.75rem; font-weight: 900; margin-bottom: 15px; }
     .lvl-easy { background: #2ecc71; color: #000; }
     .lvl-med { background: #f1c40f; color: #000; }
@@ -273,6 +284,20 @@
         transform: skewX(-25deg); animation: shine 3s infinite;
     }
     @keyframes shine { 0% { left: -50%; } 100% { left: 150%; } }
+    
+    /* --- CARTA FINAL --- */
+    .final-letter {
+        font-family: 'Dancing Script', cursive;
+        color: #fff;
+        font-size: 1.5rem;
+        line-height: 1.6;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        padding: 10px;
+    }
+    
+    /* Animação do Beijo */
+    .kiss-anim { font-size: 4rem; animation: kissBeat 1.2s infinite alternate; margin: 15px 0; display: block; }
+    @keyframes kissBeat { from { transform: scale(1) rotate(-10deg); } to { transform: scale(1.3) rotate(10deg); } }
 
   </style>
 </head>
@@ -337,8 +362,9 @@
     </section>
 </div>
 
-<div class="game-floater" onclick="abrirJogo()">
-    🎮 Quiz
+<div class="floaters-container">
+    <div class="surprise-floater" onclick="abrirSurpresa()">🎁 Surpresa</div>
+    <div class="game-floater" onclick="abrirJogo()">🎮 Quiz</div>
 </div>
 
 <div id="game-modal" class="modal-bg" onclick="fecharJogo(event)">
@@ -363,6 +389,56 @@
             </div>
             
             <button class="btn-play" style="width:100%; margin-top:20px;" onclick="resgatarPremio()">📸 PRINTAR AGORA</button>
+        </div>
+
+    </div>
+</div>
+
+<div id="surprise-modal" class="modal-bg" onclick="fecharSurpresa(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        
+        <div id="surpresa-fase-1">
+            <h2 style="color:var(--accent); margin-bottom:20px; font-weight: 900;">UMA PERGUNTA...</h2>
+            <p style="font-size:1.1rem; margin-bottom:30px; line-height: 1.5;">Está preparada pra ver a coisa mais linda do universo todo?</p>
+            <button class="btn-play" style="width:100%; justify-content:center;" onclick="tocarVideoSurpresa()">SIM, ESTOU!</button>
+        </div>
+
+        <div id="surpresa-fase-2" style="display:none;">
+             <video id="video-surpresa" playsinline controls style="width:100%; border-radius:10px; border:2px solid var(--accent);">
+                <source src="img/gif.mp4" type="video/mp4">
+             </video>
+        </div>
+
+        <div id="surpresa-fase-3" style="display:none;">
+            <h2 style="color:#ff0055; margin-bottom:15px; font-weight:900;">DO FUNDO DO CORAÇÃO ❤️</h2>
+            <p style="margin-bottom:25px; font-size:1rem; line-height:1.6; color:#ddd;">
+                Espero que goste do presente, foi do fundo do coração.<br><br>
+                Então, vamos fazer de tudo pra que sejamos um pra sempre?
+            </p>
+            <div style="display:flex; gap:10px; justify-content:center;">
+                <button class="btn-play" style="background:#2ecc71; color:#fff;" onclick="respostaFinal('SIM')">SIM</button>
+                <button class="btn-details" onclick="respostaFinal('NAO')">NÃO</button>
+            </div>
+        </div>
+
+        <div id="surpresa-fase-4" style="display:none;">
+            <div class="final-letter">
+                "Eu vou sempre estar por você nos momentos mais difíceis, e tenho certeza que Deus vai nos abençoar sempre. Te amo!"
+            </div>
+            <div style="margin-top:20px; font-size:2rem;">♾️❤️🙏</div>
+            <button class="btn-play" style="width:100%; margin-top:25px; background: transparent; border: 1px solid rgba(255,255,255,0.3); color: #ccc; font-size: 0.8rem;" onclick="irParaBeijo()">CONTINUAR...</button>
+        </div>
+
+        <div id="surpresa-fase-5" style="display:none;">
+            <span class="kiss-anim">😘</span>
+            <h2 style="color: #fff; margin: 20px 0; font-size: 1.5rem;">Agora eu mereço um beijinho?</h2>
+            <button class="btn-play" style="background:var(--game-pink); color:#fff; width:100%;" onclick="finalizarComChaveDeOuro()">MERECE MUITO!</button>
+        </div>
+
+        <div id="surpresa-fase-6" style="display:none;">
+            <h1 style="font-family: 'Great Vibes'; font-size: 3.5rem; color: var(--accent); margin-bottom: 20px;">Obrigado por tudo ❤️</h1>
+            <p style="color: #ccc; margin-bottom: 30px;">(Pode me beijar agora)</p>
+            <button class="btn-details" style="width:100%;" onclick="fecharSurpresa()">FECHAR</button>
         </div>
 
     </div>
@@ -395,7 +471,7 @@
     const vPlayer = document.getElementById('v-player');
     const playerModal = document.getElementById('player-modal');
 
-    // LÓGICA DE TRANSIÇÃO (CORRIGIDA)
+    // LÓGICA DE TRANSIÇÃO
     function dispararIntro() {
         overlay.style.display = 'none';
         introScreen.style.display = 'flex';
@@ -411,12 +487,7 @@
     introVideo.onended = () => {
         introScreen.style.display = 'none';
         main.style.display = 'block';
-        
-        // Delay minúsculo para a transição de opacidade funcionar
-        setTimeout(() => {
-            main.style.opacity = '1';
-        }, 50);
-
+        setTimeout(() => { main.style.opacity = '1'; }, 50);
         musica.play().catch(e => console.log("Áudio aguardando interação")); 
     };
 
@@ -488,7 +559,67 @@
         setTimeout(() => { heart.remove(); }, 1200);
     });
 
-    // Quiz Lógica
+    // --- LÓGICA DA SURPRESA (ATUALIZADA) ---
+    const surpriseModal = document.getElementById('surprise-modal');
+    const videoSurpresa = document.getElementById('video-surpresa');
+    
+    // Pegando as fases pelo ID
+    const fases = [1, 2, 3, 4, 5, 6].map(n => document.getElementById(`surpresa-fase-${n}`));
+
+    function resetarSurpresa() {
+        fases.forEach(f => f.style.display = 'none');
+        fases[0].style.display = 'block'; // Começa na fase 1
+    }
+
+    function abrirSurpresa() {
+        surpriseModal.style.display = 'flex';
+        resetarSurpresa();
+        musica.pause();
+    }
+
+    function fecharSurpresa(e) { 
+        if(e && e.target !== surpriseModal && e.type !== 'click' && e.target.tagName !== 'BUTTON') return; 
+        surpriseModal.style.display = 'none'; 
+        videoSurpresa.pause();
+        musica.play().catch(()=>{});
+    }
+
+    function tocarVideoSurpresa() {
+        fases[0].style.display = 'none';
+        fases[1].style.display = 'block';
+        videoSurpresa.playbackRate = 0.5; // Câmera lenta
+        videoSurpresa.play();
+    }
+
+    videoSurpresa.onended = () => {
+        fases[1].style.display = 'none';
+        fases[2].style.display = 'block'; 
+    };
+
+    function respostaFinal(resp) {
+        if (resp === 'SIM') {
+            fases[2].style.display = 'none';
+            fases[3].style.display = 'block'; // Carta
+            for(let i=0; i<30; i++) setTimeout(()=> document.body.click(), i*100);
+            musica.play().catch(()=>{});
+        } else {
+            alert("Resposta errada, tente de novo! 🤨❤️");
+        }
+    }
+
+    function irParaBeijo() {
+        fases[3].style.display = 'none';
+        fases[4].style.display = 'block'; // Tela do beijinho
+    }
+
+    function finalizarComChaveDeOuro() {
+        fases[4].style.display = 'none';
+        fases[5].style.display = 'block'; // Tela final "Obrigado"
+        // Explosão final de amor
+        for(let i=0; i<50; i++) setTimeout(()=> document.body.click(), i*50);
+    }
+
+    // --- LÓGICA DO QUIZ ---
     const perguntas = [
         { texto: "Qual é minha cor favorita?", opcoes: ["A que Você usa ", "Preto", "Vermelho"], correta: 0 },
         { texto: "Dia do começo do namoro?", opcoes: ["Dia 05", "Dia 10", "Dia 12"], correta: 0 },
